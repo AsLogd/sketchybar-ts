@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import { SketchyBar } from "./main.ts";
+import { SketchyBar } from "./mod.ts";
 
 describe("Sketchybar", () => {
   it("Creates a new instance", () => {

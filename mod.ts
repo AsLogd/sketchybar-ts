@@ -1,4 +1,9 @@
-import { BarProperties, ItemPosition, ItemProperties, Style } from "./types.ts";
+import type {
+  BarProperties,
+  ItemPosition,
+  ItemProperties,
+  Style,
+} from "./types.ts";
 
 function _styleToString(style: Style): string {
   return Object.entries(style)
