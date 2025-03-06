@@ -61,7 +61,7 @@ export class SketchyBar {
    * Adds an item
    * https://felixkratz.github.io/SketchyBar/config/items#items-and-their-properties
    */
-  addItem(name: string, position: ItemPosition) {
+  addItem(name: string, position: ItemPosition): SketchyBar {
     this._currentArgs.push("--add", "item", name, position);
     this._lastItem = name;
     return this;
