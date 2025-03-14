@@ -20,7 +20,7 @@ type HexadecimalDigit =
   | "D"
   | "E";
 type H = HexadecimalDigit;
-type ColorComponent = `${H}`;
+type ColorComponent = `${H}${H}`;
 type PropertyPrefix<P extends string, T extends object> = {
   [K in keyof T as `${P}${string & K}`]: T[K];
 };
