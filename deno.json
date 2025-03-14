@@ -3,7 +3,7 @@
     "dev": "deno run --watch main.ts"
   },
   "name": "@aslogd/sketchybar-ts",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "license": "MIT",
   "exports": "./mod.ts",
   "imports": {

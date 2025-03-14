@@ -14,11 +14,13 @@ type HexadecimalDigit =
   | "c"
   | "d"
   | "e"
+  | "f"
   | "A"
   | "B"
   | "C"
   | "D"
-  | "E";
+  | "E"
+  | "F";
 type H = HexadecimalDigit;
 type ColorComponent = `${H}${H}`;
 type PropertyPrefix<P extends string, T extends object> = {
