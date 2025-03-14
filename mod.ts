@@ -92,3 +92,5 @@ export class SketchyBar {
     return this._currentArgs.join(" ");
   }
 }
+
+export * from "./types.ts";
