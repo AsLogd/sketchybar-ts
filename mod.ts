@@ -43,7 +43,7 @@ export class SketchyBar {
    * Sets the style for the bar
    * https://felixkratz.github.io/SketchyBar/config/bar#configuration-of-the-bar
    */
-  setBarStyle(style: BarProperties): SketchyBar {
+  setBarStyle(style: Partial<BarProperties>): SketchyBar {
     this._currentArgs.push("--bar", _styleToString(style));
     return this;
   }
@@ -52,7 +52,7 @@ export class SketchyBar {
    * Sets the default style for the items added moving forward
    * https://felixkratz.github.io/SketchyBar/config/items#changing-the-default-values-for-all-further-items
    */
-  setItemDefaultStyle(style: ItemProperties): SketchyBar {
+  setItemDefaultStyle(style: Partial<ItemProperties>): SketchyBar {
     this._currentArgs.push("--default", _styleToString(style));
     return this;
   }
@@ -70,7 +70,7 @@ export class SketchyBar {
   /**
    * Sets item properties. If no item is specified, it changes last added item.
    */
-  setItem(properties: ItemProperties, itemOverride?: string) {
+  setItem(properties: Partial<ItemProperties>, itemOverride?: string) {
     const item = itemOverride ?? this._lastItem;
     if (!item) throw new Error("Item not provided and not in context.");
     this._currentArgs.push("--set", item, _styleToString(properties));
