@@ -22,34 +22,26 @@ type HexadecimalDigit =
   | "E"
   | "F";
 type H = HexadecimalDigit;
-type ColorComponent = `${H}${H}`;
-type PropertyPrefix<P extends string, T extends object> = {
-  [K in keyof T as `${P}${string & K}`]: T[K];
+export type ColorComponent = `${H}${H}`;
+export type NestedBackgroundProperties = {
+  background: BackgroundProperties;
 };
-type NestedBackgroundProperties = PropertyPrefix<
-  "background.",
-  ItemBackgroundProperties
->;
 
-type NestedIconProperties = PropertyPrefix<
-  "icon.",
-  ItemTextProperties
->;
+export type NestedIconProperties = {
+  icon: TextProperties & { value: string };
+};
 
-type NestedLabelProperties = PropertyPrefix<
-  "label.",
-  ItemTextProperties
->;
+export type NestedLabelProperties = {
+  label: TextProperties & { value: string };
+};
 
-type NestedShadowProperties = PropertyPrefix<
-  "shadow.",
-  ItemShadowProperties
->;
+export type NestedShadowProperties = {
+  shadow: ShadowProperties;
+};
 
-type NestedImageProperties = PropertyPrefix<
-  "image.",
-  ItemImageProperties
->;
+export type NestedImageProperties = {
+  image: ImageProperties & { value: string };
+};
 export type ItemPosition = "left" | "right" | "center";
 export type TextPosition = "left" | "right" | "center";
 
@@ -99,39 +91,35 @@ export type BarProperties = {
   sticky: number;
   // If fonts should be smoothened
   font_smoothing: number;
-  // If the bar should draw a shadow
-  shadow: number;
 };
 
-export type ItemBackgroundProperties =
-  & {
-    // If the background should be rendered
-    drawing: boolean;
-    // Fill color of the background
-    color: Color;
-    // Color of the backgrounds border
-    border_color: Color;
-    // Width of the background border
-    border_width: number;
-    // Overrides the height of the background
-    height: number;
-    // Corner radius of the background
-    corner_radius: number;
-    // Padding to the left of the background
-    padding_left: number;
-    // Padding to the right of the background
-    padding_right: number;
-    // Vertical offset applied to the background
-    y_offset: number;
-    // By how much the background clips the bar (i.e. transparent holes in the bar)
-    clip: number;
-    // The image to display in the bar
-    image: string;
-  }
-  & NestedShadowProperties
-  & NestedImageProperties;
+export type BackgroundProperties = {
+  // If the background should be rendered
+  drawing: boolean;
+  // Fill color of the background
+  color: Color;
+  // Color of the backgrounds border
+  border_color: Color;
+  // Width of the background border
+  border_width: number;
+  // Overrides the height of the background
+  height: number;
+  // Corner radius of the background
+  corner_radius: number;
+  // Padding to the left of the background
+  padding_left: number;
+  // Padding to the right of the background
+  padding_right: number;
+  // Vertical offset applied to the background
+  y_offset: number;
+  // By how much the background clips the bar (i.e. transparent holes in the bar)
+  clip: number;
+  // The image to display in the bar
+  image: string;
+} & NestedShadowProperties &
+  NestedImageProperties;
 
-export type ItemGeometryProperties = {
+export type GeometryProperties = {
   // If the item should be drawn into the bar
   drawing: boolean;
   // Position of the item in the bar
@@ -156,15 +144,7 @@ export type ItemGeometryProperties = {
   blur_radius: number[];
 } & NestedBackgroundProperties;
 
-export type ItemIconProperties = {
-  icon: string;
-} & NestedIconProperties;
-
-export type ItemLabelProperties = {
-  label: string;
-} & NestedLabelProperties;
-
-export type ItemScriptingProperties = {
+export type ScriptingProperties = {
   script: string;
   click_script: string;
   // Time in seconds between routine script executins (0 means never)
@@ -175,45 +155,43 @@ export type ItemScriptingProperties = {
   mach_helper: string;
 };
 
-export type ItemTextProperties =
-  & {
-    // If the text is rendered
-    drawing: boolean;
-    // If the text uses the highlight_color or the regular color
-    highlight: boolean;
-    // Color used to render the text
-    color: Color;
-    // Highlight color of the text (e.g. for active space icon)
-    highlight_color: Color;
-    // Padding to the left of the text
-    padding_left: number;
-    // Padding to the right of the text
-    padding_right: number;
-    // Vertical offset applied to the text
-    y_offset: number;
-    // The font to be used for the text
-    font: string;
-    // The font family to be used for the text
-    "font.family": string;
-    // The font style to be used for the text
-    "font.style": string;
-    // The font size to be used for the text
-    "font.size": number;
-    // Sets the text to the specified string
-    string: string;
-    // Sets the scroll speed of text trucated by max_chars on items with scroll_texts enabled
-    scroll_duration: number;
-    // Sets the maximum characters to display (can be scrolled via the items scroll_texts property)
-    max_chars: number;
-    // Makes the text use a fixed width given in points
-    width: number | "dynamic";
-    // Aligns the text in its container when it has a fixed width larger than the content width
-    align: TextPosition;
-  }
-  & NestedBackgroundProperties
-  & NestedShadowProperties;
+export type TextProperties = {
+  // If the text is rendered
+  drawing: boolean;
+  // If the text uses the highlight_color or the regular color
+  highlight: boolean;
+  // Color used to render the text
+  color: Color;
+  // Highlight color of the text (e.g. for active space icon)
+  highlight_color: Color;
+  // Padding to the left of the text
+  padding_left: number;
+  // Padding to the right of the text
+  padding_right: number;
+  // Vertical offset applied to the text
+  y_offset: number;
+  // The font to be used for the text
+  font: string;
+  // The font family to be used for the text
+  "font.family": string;
+  // The font style to be used for the text
+  "font.style": string;
+  // The font size to be used for the text
+  "font.size": number;
+  // Sets the text to the specified string
+  string: string;
+  // Sets the scroll speed of text trucated by max_chars on items with scroll_texts enabled
+  scroll_duration: number;
+  // Sets the maximum characters to display (can be scrolled via the items scroll_texts property)
+  max_chars: number;
+  // Makes the text use a fixed width given in points
+  width: number | "dynamic";
+  // Aligns the text in its container when it has a fixed width larger than the content width
+  align: TextPosition;
+} & NestedBackgroundProperties &
+  NestedShadowProperties;
 
-export type ItemImageProperties = {
+export type ImageProperties = {
   // If the image should draw
   drawing: boolean;
   // The scale factor that should be applied to the image
@@ -234,7 +212,7 @@ export type ItemImageProperties = {
   string: number;
 } & NestedShadowProperties;
 
-export type ItemShadowProperties = {
+export type ShadowProperties = {
   // If the shadow should be drawn
   drawing: boolean;
   // Color of the shadow
@@ -245,15 +223,15 @@ export type ItemShadowProperties = {
   distance: number;
 };
 
-export type ItemProperties =
-  & ItemShadowProperties
-  & ItemBackgroundProperties
-  & ItemGeometryProperties
-  & ItemScriptingProperties
-  & ItemImageProperties
-  & ItemLabelProperties;
+export type ItemProperties = ShadowProperties &
+  BackgroundProperties &
+  GeometryProperties &
+  ScriptingProperties &
+  ImageProperties &
+  NestedIconProperties &
+  NestedLabelProperties;
 
-type StylePrimitive = number | string | Color | number[] | boolean;
-type StyleValue = StylePrimitive | Record<string, StylePrimitive>;
-
+export type StylePrimitive = number | string | Color | number[] | boolean;
+export type StyleValue = StylePrimitive | { [prop: string]: StyleValue };
 export type Style = Record<string, StyleValue>;
+export type RunCommandType = (...args: string[]) => Deno.Command;
