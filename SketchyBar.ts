@@ -4,11 +4,11 @@ import type {
   ItemProperties,
   ItemPosition,
   RunCommandType,
+  ItemConfig,
 } from "./types.ts";
 
 export class SketchyBar {
   _currentArgs: string[] = [];
-  _lastItem: string | null = null;
   _runCommand: RunCommandType;
 
   constructor(run: RunCommandType) {
@@ -26,11 +26,10 @@ export class SketchyBar {
   }
 
   /**
-   * Subscribe item to event. If no item specified, it applies eto the last added item.
+   * Subscribe item to event.
    * https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
    */
-  subscribeToEvent(eventName: string, itemOverride?: string): SketchyBar {
-    const item = itemOverride ?? this._lastItem;
+  subscribeToEvent(item: string, eventName: string): SketchyBar {
     if (!item) throw new Error("Item not provided and not in context.");
     this._currentArgs.push("--subscribe", item, eventName);
     return this;
@@ -40,7 +39,7 @@ export class SketchyBar {
    * Sets the style for the bar
    * https://felixkratz.github.io/SketchyBar/config/bar#configuration-of-the-bar
    */
-  setBarStyle(style: Partial<BarProperties>): SketchyBar {
+  setBarStyle(style: BarProperties): SketchyBar {
     this._currentArgs.push("--bar", ...styleToString(style));
     return this;
   }
@@ -49,7 +48,7 @@ export class SketchyBar {
    * Sets the default style for the items added moving forward
    * https://felixkratz.github.io/SketchyBar/config/items#changing-the-default-values-for-all-further-items
    */
-  setItemDefaultStyle(style: Partial<ItemProperties>): SketchyBar {
+  setItemDefaultStyle(style: ItemProperties): SketchyBar {
     this._currentArgs.push("--default", ...styleToString(style));
     return this;
   }
@@ -58,18 +57,25 @@ export class SketchyBar {
    * Adds an item
    * https://felixkratz.github.io/SketchyBar/config/items#items-and-their-properties
    */
-  addItem(name: string, position: ItemPosition): SketchyBar {
+  addItem(
+    name: string,
+    { position, properties, events }: ItemConfig,
+  ): SketchyBar {
     this._currentArgs.push("--add", "item", name, position);
-    this._lastItem = name;
+    if (properties) this.setItem(name, properties);
+    if (events) {
+      for (const event of events) {
+        this.subscribeToEvent(name, event);
+      }
+    }
     return this;
   }
 
   /**
-   * Sets item properties. If no item is specified, it changes last added item.
+   * Sets item properties.
    */
-  setItem(properties: Partial<ItemProperties>, itemOverride?: string) {
-    const item = itemOverride ?? this._lastItem;
-    if (!item) throw new Error("Item not provided and not in context.");
+  setItem(item: string, properties: ItemProperties) {
+    if (!item) throw new Error("Item not provided");
     this._currentArgs.push("--set", item, ...styleToString(properties));
   }
 

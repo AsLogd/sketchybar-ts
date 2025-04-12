@@ -33,6 +33,21 @@ function entriesToStyleString(
   return r.flatMap(([prop, value]) => t(prop, value));
 }
 
+function getPrimitiveValue(v: unknown) {
+  if (typeof v === "string") {
+    const shouldBeQuoted = [" ", "/"].some((c) => v.includes(c));
+    return shouldBeQuoted ? `"${v}"` : v;
+  }
+  return v;
+}
+
+function getProp(prefix: string = "", p: string) {
+  const prop = p === "value" ? "" : p;
+  const shouldUseDot = prefix.length > 1 && !!prop;
+  const dot = shouldUseDot ? "." : "";
+  return `${prefix}${dot}${prop}`;
+}
+
 export function styleToString(style: Style, prefix?: string): string[] {
   const { nested, ...plain } = groupBy(Object.entries(style), ([_, v]) => {
     if (Array.isArray(v)) {
@@ -44,21 +59,20 @@ export function styleToString(style: Style, prefix?: string): string[] {
     }
     return "primitive";
   });
-  const propPrefix = prefix ? `${prefix}.` : "";
   const primitiveValues = entriesToStyleString(
     plain.primitive,
-    (prop, value) => `${propPrefix}${prop}=${value}`,
+    (prop, value) => `${getProp(prefix, prop)}=${getPrimitiveValue(value)}`,
   );
   const colorValues = entriesToStyleString(plain.color, (prop, value) => {
     const { a, r, g, b } = value as Color;
-    return `${propPrefix}${prop}=0x${r}${g}${b}${a}`;
+    return `${getProp(prefix, prop)}=0x${r}${g}${b}${a}`;
   });
   const numListValues = entriesToStyleString(plain.numList, (prop, value) => {
     const list = (value as number[]).join(",");
-    return `${propPrefix}${prop}=${list}`;
+    return `${getProp(prefix, prop)}=${list}`;
   });
   const nestedValues = entriesToStyleString(nested, (prop, value) =>
-    styleToString(value as Style, `${propPrefix}${prop}`),
+    styleToString(value as Style, getProp(prefix, prop)),
   );
 
   return [

@@ -24,23 +24,23 @@ type HexadecimalDigit =
 type H = HexadecimalDigit;
 export type ColorComponent = `${H}${H}`;
 export type NestedBackgroundProperties = {
-  background: BackgroundProperties;
+  background?: BackgroundProperties;
 };
 
 export type NestedIconProperties = {
-  icon: TextProperties & { value: string };
+  icon?: TextProperties & { value?: string };
 };
 
 export type NestedLabelProperties = {
-  label: TextProperties & { value: string };
+  label?: TextProperties & { value?: string };
 };
 
 export type NestedShadowProperties = {
-  shadow: ShadowProperties;
+  shadow?: ShadowProperties;
 };
 
 export type NestedImageProperties = {
-  image: ImageProperties & { value: string };
+  image?: ImageProperties & { value?: string };
 };
 export type ItemPosition = "left" | "right" | "center";
 export type TextPosition = "left" | "right" | "center";
@@ -52,7 +52,7 @@ export type Color = {
   a: ColorComponent;
 };
 
-export type BarProperties = {
+export type BarProperties = Partial<{
   // Color of the bar
   color: Color;
   // Color of the bar's border
@@ -91,9 +91,9 @@ export type BarProperties = {
   sticky: number;
   // If fonts should be smoothened
   font_smoothing: number;
-};
+}>;
 
-export type BackgroundProperties = {
+export type BackgroundProperties = Partial<{
   // If the background should be rendered
   drawing: boolean;
   // Fill color of the background
@@ -116,10 +116,11 @@ export type BackgroundProperties = {
   clip: number;
   // The image to display in the bar
   image: string;
-} & NestedShadowProperties &
+}> &
+  NestedShadowProperties &
   NestedImageProperties;
 
-export type GeometryProperties = {
+export type GeometryProperties = Partial<{
   // If the item should be drawn into the bar
   drawing: boolean;
   // Position of the item in the bar
@@ -142,9 +143,10 @@ export type GeometryProperties = {
   scroll_texts: boolean;
   // The blur radius applied to the background of the item
   blur_radius: number[];
-} & NestedBackgroundProperties;
+}> &
+  NestedBackgroundProperties;
 
-export type ScriptingProperties = {
+export type ScriptingProperties = Partial<{
   script: string;
   click_script: string;
   // Time in seconds between routine script executins (0 means never)
@@ -153,9 +155,9 @@ export type ScriptingProperties = {
   updates: boolean | "when_shown";
   // Registers a helper for direct event notifications
   mach_helper: string;
-};
+}>;
 
-export type TextProperties = {
+export type TextProperties = Partial<{
   // If the text is rendered
   drawing: boolean;
   // If the text uses the highlight_color or the regular color
@@ -188,10 +190,11 @@ export type TextProperties = {
   width: number | "dynamic";
   // Aligns the text in its container when it has a fixed width larger than the content width
   align: TextPosition;
-} & NestedBackgroundProperties &
+}> &
+  NestedBackgroundProperties &
   NestedShadowProperties;
 
-export type ImageProperties = {
+export type ImageProperties = Partial<{
   // If the image should draw
   drawing: boolean;
   // The scale factor that should be applied to the image
@@ -210,9 +213,10 @@ export type ImageProperties = {
   y_offset: number;
   // The image to display in the bar
   string: number;
-} & NestedShadowProperties;
+}> &
+  NestedShadowProperties;
 
-export type ShadowProperties = {
+export type ShadowProperties = Partial<{
   // If the shadow should be drawn
   drawing: boolean;
   // Color of the shadow
@@ -221,7 +225,7 @@ export type ShadowProperties = {
   angle: number;
   // Distance of the shadow
   distance: number;
-};
+}>;
 
 export type ItemProperties = ShadowProperties &
   BackgroundProperties &
@@ -231,6 +235,11 @@ export type ItemProperties = ShadowProperties &
   NestedIconProperties &
   NestedLabelProperties;
 
+export type ItemConfig = {
+  position: ItemPosition;
+  properties?: ItemProperties;
+  events?: string[];
+};
 export type StylePrimitive = number | string | Color | number[] | boolean;
 export type StyleValue = StylePrimitive | { [prop: string]: StyleValue };
 export type Style = Record<string, StyleValue>;
